@@ -100,7 +100,7 @@ export default function GameModal({visible, onAdd, onCancel, onDelete, game} : G
                                 Cancel
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttonAdd} onPress={() => onDelete(id)} disabled={id == 0}>
+                        <TouchableOpacity style={styles.buttonDelete} onPress={() => onDelete(id)} disabled={id == 0}>
                             <Text style={styles.buttonText}>
                                 Delete
                             </Text>
@@ -137,16 +137,25 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         margin:10,
-        padding:0
+        padding:5
     },
     buttonCancel:{
+        backgroundColor:'rgb(204, 221, 12)',
+        borderRadius:5,
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center',
+        margin:10,
+        padding:5
+    },
+    buttonDelete:{
         backgroundColor:'rgb(215, 28, 18)',
         borderRadius:5,
         flex:1,
         alignItems:'center',
         justifyContent:'center',
         margin:10,
-        padding:0
+        padding:5
     },
     buttonContainer: {
         flexDirection:"row",

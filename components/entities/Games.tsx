@@ -9,8 +9,8 @@ export type GamesProps = {
 export default function Games({title, price}: GamesProps){
     return (
         <View style={styles.box}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.price}>{price}</Text>
+            <Text style={styles.title}>Title: {title}</Text>
+            <Text style={styles.price}>Price: R${price}</Text>
         </View>
     )
 };
@@ -26,9 +26,10 @@ const styles = StyleSheet.create({
     title:{
         fontSize:20,
         fontWeight: 'bold',
+        color:'white'
     },
     price:{
-        alignItems:'flex-end',
+        color:'white',
         fontSize:20,
         fontWeight: 'bold',
     }

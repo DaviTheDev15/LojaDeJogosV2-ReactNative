@@ -18,7 +18,15 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
-} as IconMapping;
+  'cart': 'add-shopping-cart',
+  'fire':'fireplace',
+  'menu':'menu'
+}  as Partial<
+  Record<
+    import('expo-symbols').SymbolViewProps['name'],
+    React.ComponentProps<typeof MaterialIcons>['name']
+  >
+>;
 
 /**
  * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.

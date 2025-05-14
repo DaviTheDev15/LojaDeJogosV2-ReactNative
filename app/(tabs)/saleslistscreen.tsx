@@ -8,6 +8,7 @@ import SaleModal from '@/components/modals/SaleModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 
+
 export default function SaleListScreen(){
     const [sales, setSales] = useState<ISales[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -115,13 +116,19 @@ export default function SaleListScreen(){
                     <Text style={styles.headerButton}>Add New Sale</Text>
                 </TouchableOpacity>
             </ThemedView>
-            <ThemedView style={styles.container}>
-                {sales.map(sale => <TouchableOpacity key={sale.id} onPress={() => openEditModal(sale)}>
-                    <Sales games_purchased={sale.games_purchased} purchase_value={sale.purchase_value} date={sale.date} purchaser={sale.purchaser}/>
-                </TouchableOpacity>)}
-                
-            </ThemedView>
-            <Text style={styles.headerButton}>{text}</Text>
+            {sales.map(sale => (
+                <ThemedView key={sale.id} style={styles.itemContainer}>
+                    <TouchableOpacity onPress={() => openEditModal(sale)}>
+                        <Sales
+                            games_purchased={sale.games_purchased}
+                            purchase_value={sale.purchase_value}
+                            date={sale.date}
+                            purchaser={sale.purchaser}
+                        />
+                    </TouchableOpacity>
+                </ThemedView>
+            ))}
+            <Text style={styles.text}>{text}</Text>
             <SaleModal
                 visible={modalVisible}
                 onCancel={closeModal}
@@ -134,32 +141,35 @@ export default function SaleListScreen(){
 }
 
 const styles = StyleSheet.create({
-    titleContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    stepContainer:{
-        gap: 8,
-        marginBottom: 8,
-    },
-    reactLogo:{
-        bottom: 0,
-        left: 0,
-    },
-    container:{
-        flex:1,
-        backgroundColor: '#005C53',
-    },
     headerContainer:{
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom:5,
+        borderRadius:10,
+        margin:10
     },
     headerButton:{
         fontWeight: 'bold',
         fontSize: 20,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         marginTop:50    
+    },
+    text:{
+        color:'white',
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
+    itemContainer: {
+    backgroundColor: '#1D3D47',
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3,
     },
 })

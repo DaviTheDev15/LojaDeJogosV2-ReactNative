@@ -2,13 +2,14 @@ import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import Games from '@/components/entities/Games';
 import MyScrollView from '@/components/MyScrollView';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import { IGames } from '@/components/interfaces/IGames';
 import GameModal from '@/components/modals/GameModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 
-export default function GameListScreen(){
+
+export default function SaleListScreen(){
     const [games, setGames] = useState<IGames[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedGame, setSelectedGame] = useState<IGames>();
@@ -49,8 +50,7 @@ export default function GameListScreen(){
         text = JSON.stringify(location);
     }
 
-    const onAdd = async (name: string, price: number,  creator: string, publisher: string , year_of_realease: number, minimum_requirements: string, platform: string ,id?:number
-    ) => {
+    const onAdd = async (name: string, price: number,  creator: string, publisher: string , year_of_realease: number, minimum_requirements: string, platform: string ,id?:number) => {
 
         if (!id || id <= 0){
             const newGame: IGames = {
@@ -102,7 +102,7 @@ export default function GameListScreen(){
         AsyncStorage.setItem("@GamesApp:games", JSON.stringify(newGames));
         setModalVisible(false)
     }
-
+    
     const openModal = () => {
         setSelectedGame(undefined);
         setModalVisible(true);
@@ -124,15 +124,16 @@ export default function GameListScreen(){
                     <Text style={styles.headerButton}>Add New Game</Text>
                 </TouchableOpacity>
             </ThemedView>
-            <ThemedView style={styles.container}>
-                {games.map(game => 
-                    <TouchableOpacity key={game.id} onPress={() => openEditModal(game)}>
-                        <Games title={game.name} price={game.price}/>
-                        <Text style={styles.text}>Click for more informations</Text>
+            {games.map(game => (
+                <ThemedView key={game.id} style={styles.itemContainer}>
+                    <TouchableOpacity onPress={() => openEditModal(game)}>
+                        <Games
+                        title={game.name} price={game.price} />
+                    <Text style={styles.text1}>Click for more informations</Text>
                     </TouchableOpacity>
-                )}
-            </ThemedView>
-            <Text style={styles.headerButton}>{text}</Text>
+                </ThemedView>
+            ))}
+            <Text style={styles.text2}>{text}</Text>
             <GameModal
                 visible={modalVisible}
                 onCancel={closeModal}
@@ -141,42 +142,44 @@ export default function GameListScreen(){
                 game={selectedGame}
             />
         </MyScrollView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
-    titleContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    stepContainer:{
-        gap: 8,
-        marginBottom: 8,
-    },
-    reactLogo:{
-        bottom: 0,
-        left: 0,
-    },
-    container:{
-        flex:1,
-        backgroundColor: '#005C53',
-    },
     headerContainer:{
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom:5,
+        borderRadius:10,
+        margin:10
     },
     headerButton:{
         fontWeight: 'bold',
         fontSize: 20,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         marginTop:50    
     },
-    text:{
+    text1:{
+        color:'white',
         fontSize: 15,
-        textAlign: 'left',
-        padding:20,
-        color:'white'
-    }
+        fontWeight: 'bold',
+    },
+    text2:{
+        color:'white',
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
+    itemContainer: {
+    backgroundColor: '#1D3D47',
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3,
+    },
 })
