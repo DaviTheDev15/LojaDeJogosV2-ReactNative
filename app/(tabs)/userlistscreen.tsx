@@ -6,18 +6,22 @@ import {useEffect, useState} from 'react';
 import { IUser } from '@/components/interfaces/IUser';
 import UserModal from '@/components/modals/UserModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
 
-export default function UserListScreen(){
-    const [user, setUser] = useState<IUser[]>([]);
+
+export default function SaleListScreen(){
+    const [users, setUsers] = useState<IUser[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<IUser>();
+    const [location, setLocation] = useState({});
+    const [errorMsg, setErrorMsg] = useState('');
 
     useEffect(() => {
         async function getData() {
             try{
-                const data = await AsyncStorage.getItem("@UserApp:user");
+                const data = await AsyncStorage.getItem("@UsersApp:users");
                 const usersData = data != null ? JSON.parse(data) : [];
-                setUser(usersData);
+                setUsers(usersData);
             } catch (e){
 
             }
@@ -26,7 +30,27 @@ export default function UserListScreen(){
         getData();
     }, [])
 
-    const onAdd = async (email:string, password:string , id?: number) => {
+    useEffect(() => {
+        (async () => {
+            let {status} = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted'){
+                setErrorMsg('Permission to acess location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
+        })();
+    }, [])
+
+    let text = 'Waiting...';
+    if (errorMsg){
+        text = errorMsg;
+    } else if(location){
+        text = JSON.stringify(location);
+    }
+
+    const onAdd = async (email: string, password: string,id?: number) => {
 
         if(!id || id <= 0){
             const newUser: IUser = {
@@ -36,34 +60,34 @@ export default function UserListScreen(){
             };
 
             const userPlus: IUser[] = [
-                ...user,
+                ...users,
                 newUser
             ];
-            setUser(userPlus);
-            AsyncStorage.setItem("@UserApp:user", JSON.stringify(userPlus))
+            setUsers(userPlus);
+            AsyncStorage.setItem("@UsersApp:users", JSON.stringify(userPlus))
         } else {
-            user.forEach(u => {
-                if (u.id == id){
-                    u.email = email;
-                    u.password = password;
+            users.forEach(user => {
+                if (user.id == id){
+                    user.email = email;
+                    user.password = password;
                 }
             });
-            AsyncStorage.setItem("@UserApp:user", JSON.stringify(user))
+            AsyncStorage.setItem("@UsersApp:users", JSON.stringify(users))
         }
         setModalVisible(false)
     };
 
         const onDelete = (id: number) => {
-            const newUser: Array<IUser> = [];
-            for (let index = 0; index < user.length; index++){
-                const u = user[index]
-                if (u.id != id){
-                    newUser.push(u);
+            const newUsers: Array<IUser> = [];
+            for (let index = 0; index < users.length; index++){
+                const user = users[index]
+                if (user.id != id){
+                    newUsers.push(user);
                 }
             }
     
-            setUser(newUser);
-            AsyncStorage.setItem("@UserApp:sales", JSON.stringify(user))
+            setUsers(newUsers);
+            AsyncStorage.setItem("@UsersApp:users", JSON.stringify(users))
             setModalVisible(false)
         }
     
@@ -88,12 +112,17 @@ export default function UserListScreen(){
                     <Text style={styles.headerButton}>Add New User</Text>
                 </TouchableOpacity>
             </ThemedView>
-            <ThemedView style={styles.container}>
-                {user.map(u => <TouchableOpacity key={u.id} onPress={() => openEditModal(u)}>
-                    <User email={u.email} senha={u.password} />
-                </TouchableOpacity>)}
-                
-            </ThemedView>
+            {users.map(user => (
+                <ThemedView key={user.id} style={styles.itemContainer}>
+                    <TouchableOpacity onPress={() => openEditModal(user)}>
+                        <User
+                            email={user.email}
+                            senha={user.password}
+                        />
+                    </TouchableOpacity>
+                </ThemedView>
+            ))}
+            <Text style={styles.text}>{text}</Text>
             <UserModal
                 visible={modalVisible}
                 onCancel={closeModal}
@@ -106,32 +135,31 @@ export default function UserListScreen(){
 }
 
 const styles = StyleSheet.create({
-    titleContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    stepContainer:{
-        gap: 8,
-        marginBottom: 8,
-    },
-    reactLogo:{
-        bottom: 0,
-        left: 0,
-    },
-    container:{
-        flex:1,
-        backgroundColor: '#005C53',
-    },
     headerContainer:{
-        backgroundColor: 'white',
+        backgroundColor: 'rgb(22, 109, 136)',
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom:5,
+        borderRadius:10,
+        margin:10,
     },
     headerButton:{
         fontWeight: 'bold',
         fontSize: 20,
-        paddingHorizontal: 20,
-        marginTop:50    
+        paddingHorizontal: 10,
+        marginTop:50,
+        color: 'white'
+    },
+    text:{
+        color:'white',
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
+    itemContainer: {
+        backgroundColor: '#1D3D47',
+        marginVertical: 5,
+        marginHorizontal: 10,
+        padding: 10,
+        borderRadius: 8,
     },
 })

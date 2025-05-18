@@ -44,7 +44,7 @@ export default function MyScrollView({
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#151718',
     },
     header:{
         height:250,

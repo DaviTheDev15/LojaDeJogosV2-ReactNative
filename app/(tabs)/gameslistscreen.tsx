@@ -147,7 +147,7 @@ export default function SaleListScreen(){
 
 const styles = StyleSheet.create({
     headerContainer:{
-        backgroundColor: 'white',
+        backgroundColor: 'rgb(22, 109, 136)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom:5,
@@ -158,7 +158,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         paddingHorizontal: 10,
-        marginTop:50    
+        marginTop:50,
+        color:'white'
     },
     text1:{
         color:'white',

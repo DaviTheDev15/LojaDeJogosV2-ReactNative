@@ -13,7 +13,7 @@ export type SaleModalProps = {
 
 export default function SaleModal({visible, onAdd, onCancel, onDelete, sale} : SaleModalProps){
     const [games_purchased, setGames_purchased] = useState('');
-    const [purchase_value, setPurchase_value] = useState(0);
+    const [purchase_value, setPurchase_value] = useState('');
     const [data, setData] = useState('');
     const [purchaser, setPurchaser] = useState('');
     const [id, setId] = useState<number>(0)
@@ -21,13 +21,13 @@ export default function SaleModal({visible, onAdd, onCancel, onDelete, sale} : S
     useEffect(() => {
         if(sale){
             setGames_purchased(sale.games_purchased);
-            setPurchase_value(sale.purchase_value);
+            setPurchase_value(sale.purchase_value.toString());
             setData(sale.date);
             setPurchaser(sale.purchaser);
             setId(sale.id)
         } else{
             setGames_purchased('');
-            setPurchase_value(0);
+            setPurchase_value('');
             setData('');
             setPurchaser('');
             setId(0)
@@ -47,10 +47,14 @@ export default function SaleModal({visible, onAdd, onCancel, onDelete, sale} : S
                         autoFocus
                     />
                     <TextInput 
-                        style={styles.boxInput}
-                        placeholder="Valor da Compra"
-                        value={purchase_value.toString()}
-                        onChangeText={text => setPurchase_value(Number(text))}
+                    style={styles.boxInput}
+                    placeholder="Valor da Compra"
+                    keyboardType="decimal-pad"
+                    value={purchase_value}
+                    onChangeText={text => {
+                        const cleaned = text.replace(/[^0-9.]/g, '');
+                        setPurchase_value(cleaned);
+                    }}
                     />
                     <TextInput 
                         style={styles.boxInput}
@@ -65,19 +69,19 @@ export default function SaleModal({visible, onAdd, onCancel, onDelete, sale} : S
                         onChangeText={text => setPurchaser(text)}
                     />
                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.buttonAdd} onPress={() => onAdd(games_purchased,purchase_value, data, purchaser, id)}>
+                        <TouchableOpacity style={styles.buttonAdd} onPress={() => onAdd(games_purchased,parseFloat(purchase_value) || 0, data, purchaser, id)}>
                             <Text style={styles.buttonText}>
-                                Add
+                                💾
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonCancel} onPress={() => onCancel()}>
                             <Text style={styles.buttonText}>
-                                Cancel
+                                ❌
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonDelete} onPress={() => onDelete(id)} disabled={id == 0}>
                             <Text style={styles.buttonText}>
-                                Delete
+                                🗑️
                             </Text>
                         </TouchableOpacity>
                     </View>                    
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     boxContainer: {
-        backgroundColor:'rgba(255, 255, 255, 1)',
+        backgroundColor:'#166D88',
         borderRadius:10,
         alignItems:'center',
         justifyContent:'center',
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
         padding:5
     },
     buttonCancel:{
-        backgroundColor:'rgb(204, 221, 12)',
+        backgroundColor:'rgb(243, 225, 86)',
         borderRadius:5,
         flex:1,
         alignItems:'center',
@@ -142,8 +146,9 @@ const styles = StyleSheet.create({
         alignSelf:"stretch",
         height:40,
         borderRadius: 5,
-        backgroundColor: 'rgba(79, 123, 123, 0.42)',
-        margin:5
+        backgroundColor: '#1D3D47',
+        margin:5,
+        color:'white'
     }
 })
 

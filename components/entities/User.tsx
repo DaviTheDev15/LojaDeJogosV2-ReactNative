@@ -9,8 +9,8 @@ export type UserProps = {
 export default function User({email, senha}: UserProps){
     return (
         <View style={styles.box}>
-            <Text style={styles.email}>{email}</Text>
-            <Text style={styles.senha}>{senha}</Text>
+            <Text style={styles.email}>Email: {email}</Text>
+            <Text style={styles.senha}>Password: {senha}</Text>
         </View>
     )
 };
@@ -26,10 +26,11 @@ const styles = StyleSheet.create({
     email:{
         fontSize:20,
         fontWeight: 'bold',
+        color:'white',
     },
     senha:{
-        alignItems:'flex-end',
         fontSize:20,
         fontWeight: 'bold',
+        color:'white',
     }
 });

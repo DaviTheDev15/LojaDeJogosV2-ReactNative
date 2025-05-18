@@ -142,18 +142,19 @@ export default function SaleListScreen(){
 
 const styles = StyleSheet.create({
     headerContainer:{
-        backgroundColor: 'white',
+        backgroundColor: 'rgb(22, 109, 136)',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom:5,
         borderRadius:10,
-        margin:10
+        margin:10,
     },
     headerButton:{
         fontWeight: 'bold',
         fontSize: 20,
         paddingHorizontal: 10,
-        marginTop:50    
+        marginTop:50,
+        color: 'white'
     },
     text:{
         color:'white',
@@ -161,15 +162,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     itemContainer: {
-    backgroundColor: '#1D3D47',
-    marginVertical: 5,
-    marginHorizontal: 10,
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
+        backgroundColor: '#1D3D47',
+        marginVertical: 5,
+        marginHorizontal: 10,
+        padding: 10,
+        borderRadius: 8,
     },
 })

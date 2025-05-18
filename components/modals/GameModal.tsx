@@ -12,33 +12,34 @@ export type GameModalProps = {
 
 export default function GameModal({visible, onAdd, onCancel, onDelete, game} : GameModalProps){
     const [title, setTitle] = useState<string>('');
-    const [price, setPrice] = useState<number>(0);
+
+    const [price, setPrice] = useState<string>('');
     const [creator, setCreator] = useState<string>('')
     const [id, setId] = useState<number>(0);
     const [publisher, setPublisher] = useState<string>('');
-    const [year_of_realease, setYear_of_realease] = useState<number>(0);
+    const [year_of_realease, setYear_of_realease] = useState<string>('');
     const [minimum_requirements, setMinimum_requirements] = useState<string>('');
     const [platform, setPlataform] = useState<string>('');
 
     useEffect(() => {
         if (game){
             setTitle(game.name);
-            setPrice(game.price);
+            setPrice(game.price.toString());
             setId(game.id);
             setCreator(game.creator)
             setPublisher(game.publisher)
             setMinimum_requirements(game.minimum_requirements)
             setPlataform(game.platform)
-            setYear_of_realease(game.year_of_realease)
+            setYear_of_realease(game.year_of_realease.toString())
         } else{
             setTitle('');
-            setPrice(0);
+            setPrice('');
             setId(0); 
             setCreator('')
             setPublisher('')
             setMinimum_requirements('')
             setPlataform('')
-            setYear_of_realease(0)
+            setYear_of_realease('')
         }
     },[game])
 
@@ -56,8 +57,12 @@ export default function GameModal({visible, onAdd, onCancel, onDelete, game} : G
                     <TextInput 
                         style={styles.boxInput}
                         placeholder="Price"
-                        value={price.toString()}
-                        onChangeText={text => setPrice(Number(text))}
+                        keyboardType="decimal-pad"
+                        value={price}
+                        onChangeText={text => {
+                            const cleaned = text.replace(/[^0-9.]/g, '');
+                            setPrice(cleaned);
+                        }}
                     />
                     <TextInput 
                         style={styles.boxInput}
@@ -86,23 +91,27 @@ export default function GameModal({visible, onAdd, onCancel, onDelete, game} : G
                     <TextInput 
                         style={styles.boxInput}
                         placeholder="Year of Release"
-                        value={year_of_realease.toString()}
-                        onChangeText={text => setYear_of_realease(Number(text))}
+                        keyboardType="decimal-pad"
+                        value={year_of_realease}        
+                        onChangeText={text => {
+                            const cleaned = text.replace(/[^0-9.]/g, '');
+                            setYear_of_realease(cleaned);
+                        }}
                     />
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.buttonAdd} onPress={() => onAdd(title, price, creator, publisher, year_of_realease, minimum_requirements, platform, id)}>
+                        <TouchableOpacity style={styles.buttonAdd} onPress={() => onAdd(title, parseFloat(price), creator, publisher, parseFloat(year_of_realease), minimum_requirements, platform, id)}>
                             <Text style={styles.buttonText}>
-                                Add
+                                💾
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonCancel} onPress={() => onCancel()}>
                             <Text style={styles.buttonText}>
-                                Cancel
+                                ❌
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonDelete} onPress={() => onDelete(id)} disabled={id == 0}>
                             <Text style={styles.buttonText}>
-                                Delete
+                                🗑️
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -120,7 +129,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     boxContainer: {
-        backgroundColor:'rgba(255, 255, 255, 1)',
+        backgroundColor:'#166D88',  
         borderRadius:10,
         alignItems:'center',
         justifyContent:'center',
@@ -140,7 +149,7 @@ const styles = StyleSheet.create({
         padding:5
     },
     buttonCancel:{
-        backgroundColor:'rgb(204, 221, 12)',
+        backgroundColor:'rgb(243, 225, 86)',
         borderRadius:5,
         flex:1,
         alignItems:'center',
@@ -166,7 +175,8 @@ const styles = StyleSheet.create({
         alignSelf:"stretch",
         height:40,
         borderRadius: 5,
-        backgroundColor: 'rgba(79, 123, 123, 0.42)',
-        margin:5
+        backgroundColor: '#1D3D47',
+        margin:5,
+        color:'white'
     }
 })

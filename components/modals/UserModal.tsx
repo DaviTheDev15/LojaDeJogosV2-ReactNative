@@ -48,17 +48,17 @@ export default function UserModal({visible, onAdd, onCancel, onDelete, user} : I
                    <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.buttonAdd} onPress={() => onAdd(email, password, id)}>
                             <Text style={styles.buttonText}>
-                                Add
+                                💾
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.buttonCancel} onPress={() => onCancel()}>
                             <Text style={styles.buttonText}>
-                                Cancel
+                                ❌
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttonAdd} onPress={() => onDelete(id)} disabled={id == 0}>
+                        <TouchableOpacity style={styles.buttonDelete} onPress={() => onDelete(id)} disabled={id == 0}>
                             <Text style={styles.buttonText}>
-                                Delete
+                                🗑️
                             </Text>
                         </TouchableOpacity>
                     </View>                    
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     boxContainer: {
-        backgroundColor:'rgba(255, 255, 255, 1)',
+        backgroundColor:'#166D88',  
         borderRadius:10,
         alignItems:'center',
         justifyContent:'center',
@@ -94,16 +94,25 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         margin:10,
-        padding:0
+        padding:5
     },
     buttonCancel:{
+        backgroundColor:'rgb(243, 225, 86)',
+        borderRadius:5,
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center',
+        margin:10,
+        padding:5
+    },
+    buttonDelete:{
         backgroundColor:'rgb(215, 28, 18)',
         borderRadius:5,
         flex:1,
         alignItems:'center',
         justifyContent:'center',
         margin:10,
-        padding:0
+        padding:5
     },
     buttonContainer: {
         flexDirection:"row",
@@ -114,8 +123,8 @@ const styles = StyleSheet.create({
         alignSelf:"stretch",
         height:40,
         borderRadius: 5,
-        backgroundColor: 'rgba(79, 123, 123, 0.42)',
-        margin:5
+        backgroundColor: '#1D3D47',
+        margin:5,
+        color:'white'
     }
 })
-
