@@ -7,7 +7,7 @@ import { IUser } from '@/components/interfaces/IUser';
 import UserModal from '@/components/modals/UserModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
-
+import {router} from 'expo-router';
 
 export default function SaleListScreen(){
     const [users, setUsers] = useState<IUser[]>([]);
@@ -96,9 +96,8 @@ export default function SaleListScreen(){
         setModalVisible(true);
     }
 
-    const openEditModal = (selectedUser: IUser) =>{
-        setSelectedUser(selectedUser);
-        setModalVisible(true)
+    const navigateToDetails = (selectedUser: IUser) => {
+        router.push({pathname:'/Screens/userdetailsscreen', params: {userId: selectedUser.id}})
     }
 
     const closeModal = () => {
@@ -114,7 +113,7 @@ export default function SaleListScreen(){
             </ThemedView>
             {users.map(user => (
                 <ThemedView key={user.id} style={styles.itemContainer}>
-                    <TouchableOpacity onPress={() => openEditModal(user)}>
+                    <TouchableOpacity onPress={() => navigateToDetails(user)}>
                         <User
                             email={user.email}
                             senha={user.password}

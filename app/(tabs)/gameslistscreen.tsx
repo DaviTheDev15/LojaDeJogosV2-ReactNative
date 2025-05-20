@@ -7,9 +7,9 @@ import { IGames } from '@/components/interfaces/IGames';
 import GameModal from '@/components/modals/GameModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
+import {router} from 'expo-router';
 
-
-export default function SaleListScreen(){
+export default function GameListScreen(){
     const [games, setGames] = useState<IGames[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedGame, setSelectedGame] = useState<IGames>();
@@ -108,9 +108,8 @@ export default function SaleListScreen(){
         setModalVisible(true);
     }
 
-    const openEditModal = (selectedGame: IGames) =>{
-        setSelectedGame(selectedGame);
-        setModalVisible(true)
+    const navigateToDetails = (selectedGame: IGames) => {
+        router.push({pathname: '/Screens/gamedetailsscreen', params: {gameId: selectedGame.id}})
     }
 
     const closeModal = () => {
@@ -126,7 +125,7 @@ export default function SaleListScreen(){
             </ThemedView>
             {games.map(game => (
                 <ThemedView key={game.id} style={styles.itemContainer}>
-                    <TouchableOpacity onPress={() => openEditModal(game)}>
+                    <TouchableOpacity onPress={() => navigateToDetails(game)}>
                         <Games
                         title={game.name} price={game.price} />
                     <Text style={styles.text1}>Click for more informations</Text>

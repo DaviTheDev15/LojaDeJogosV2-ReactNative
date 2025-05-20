@@ -7,7 +7,7 @@ import { ISales } from '@/components/interfaces/ISales';
 import SaleModal from '@/components/modals/SaleModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
-
+import {router} from 'expo-router';
 
 export default function SaleListScreen(){
     const [sales, setSales] = useState<ISales[]>([]);
@@ -100,9 +100,8 @@ export default function SaleListScreen(){
         setModalVisible(true);
     }
 
-    const openEditModal = (selectedSale: ISales) =>{
-        setSelectedSale(selectedSale);
-        setModalVisible(true)
+    const navigateToDetails = (selectedSale: ISales) => {
+        router.push({pathname: '/Screens/saledetailsscreen', params: {saleId: selectedSale.id}})
     }
 
     const closeModal = () => {
@@ -118,7 +117,7 @@ export default function SaleListScreen(){
             </ThemedView>
             {sales.map(sale => (
                 <ThemedView key={sale.id} style={styles.itemContainer}>
-                    <TouchableOpacity onPress={() => openEditModal(sale)}>
+                    <TouchableOpacity onPress={() => navigateToDetails(sale)}>
                         <Sales
                             games_purchased={sale.games_purchased}
                             purchase_value={sale.purchase_value}
